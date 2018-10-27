@@ -40,7 +40,7 @@ func main() {
 	if err != nil && !os.IsNotExist(err) {
 		catch(err)
 	}
-	if inf.IsDir() {
+	if inf != nil && inf.IsDir() {
 		log.Fatal(out + " is a directory")
 	}
 
