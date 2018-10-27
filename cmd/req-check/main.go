@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	mhttp "github.com/msyrus/go/http"
 )
 
 // MiB is 1 mega byte
@@ -49,7 +51,7 @@ func main() {
 
 	go func() {
 		i := 0
-		_, err := file.WriteString("[")
+		_, err = file.WriteString("[")
 		catch(err)
 
 		enc := json.NewEncoder(file)
@@ -71,7 +73,14 @@ func main() {
 		done <- struct{}{}
 	}()
 
-	http.ListenAndServe(":"+strconv.Itoa(port), http.HandlerFunc(HandleReq))
+	srvr := http.Server{
+		Addr:    ":" + strconv.Itoa(port),
+		Handler: http.HandlerFunc(HandleReq),
+	}
+
+	err = mhttp.ManageServer(&srvr, 30*time.Second)
+	catch(err)
+
 	close(ch)
 	<-done
 }
