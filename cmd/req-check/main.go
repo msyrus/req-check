@@ -20,12 +20,14 @@ const MiB = 1 << (10 * 2)
 
 var (
 	port, bcap int
+	pretty     bool
 	ch         chan interface{}
 )
 
 func main() {
 	flag.IntVar(&port, "port", 8080, "server port")
 	flag.IntVar(&bcap, "cap", 512, "max request body bytes in response")
+	flag.BoolVar(&pretty, "pretty", false, "pretty print json")
 
 	flag.Parse()
 
@@ -55,6 +57,9 @@ func main() {
 		catch(err)
 
 		enc := json.NewEncoder(file)
+		if pretty {
+			enc.SetIndent("", "\t")
+		}
 
 		for data := range ch {
 			if i != 0 {
