@@ -100,6 +100,7 @@ func catch(err error) {
 func HandleReq(w http.ResponseWriter, r *http.Request) {
 	resp := map[string]interface{}{}
 	resp["time"] = time.Now().UTC().Format(time.RFC3339Nano)
+	resp["scheme"] = r.URL.Scheme
 	resp["method"] = r.Method
 	resp["uri"] = r.Host + r.RequestURI
 	resp["query"] = r.URL.Query()
