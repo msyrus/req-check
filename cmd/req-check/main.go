@@ -142,9 +142,10 @@ func parseBody(r *http.Request) (interface{}, bool, error) {
 	switch typ {
 	case "application/json":
 		body := map[string]interface{}{}
-		if err = json.NewDecoder(r.Body).Decode(body); err != nil {
+		if err = json.NewDecoder(r.Body).Decode(&body); err != nil {
 			return nil, false, err
 		}
+		return &body, false, nil
 
 	case "application/x-www-form-urlencoded":
 		if err = r.ParseForm(); err != nil {
